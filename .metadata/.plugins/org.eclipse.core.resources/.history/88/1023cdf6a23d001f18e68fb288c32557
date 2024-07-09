@@ -1,0 +1,54 @@
+package com.jdc.sai.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.jdc.sai.dao.Books;
+import com.jdc.sai.service.BooksService;
+
+@RestController
+@RequestMapping("/books")
+public class BooksController {
+
+	@Autowired
+	BooksService booksService;
+	
+	@GetMapping("/getBooks")
+	private List<Books> getAllBooks() {
+		return booksService.getAllBooks();
+	}
+	
+	@GetMapping("/getBooksById/{bookid}")
+	private Books getBookById(@PathVariable("bookid") int bookid) {
+		return booksService.getBookById(bookid);
+	}
+	
+	@DeleteMapping("/deleteBooks/{bookid}")
+	private void deleteBooks(@PathVariable("bookid")int bookid) {
+		booksService.delete(bookid);
+	}
+	
+	@PostMapping("/saveBooks")
+	private int saveBooks(@RequestBody Books books) {
+		booksService.save(books);
+		return books.getBookid();
+	}
+	
+	@PutMapping("/updateBooks/{bookid}")
+	private Books updateBooks(@RequestBody Books books, @PathVariable("bookid")int bookid) {
+		booksService.saveOrUpdate(books, bookid);
+		return books;
+	}
+	
+	
+	
+}
